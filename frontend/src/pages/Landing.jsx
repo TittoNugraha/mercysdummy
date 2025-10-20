@@ -39,6 +39,7 @@ export default function Landing() {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: `url(${bg})`,
+          filter: "blur(2px)",
         }}
       ></div>
 
