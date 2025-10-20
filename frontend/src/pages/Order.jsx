@@ -57,7 +57,6 @@ export default function Home() {
     const item = selectedItems.find((i) => i.id === id);
     return item ? item.quantity : 0;
   };
-  l;
   const totalItems = selectedItems.reduce(
     (acc, item) => acc + item.quantity,
     0

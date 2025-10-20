@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import bg from "../assets/images/bg1.jpg";
 
 export default function Landing() {
   const [showLogin, setShowLogin] = useState(false);
@@ -32,9 +33,18 @@ export default function Landing() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="pt-20 pb-24 px-4 bg-cream min-h-screen"
+      className="fixed inset-0 overflow-hidden bg-cream"
     >
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-cream via-white to-amber-50 px-4">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${bg})`,
+        }}
+      ></div>
+
+      <div className="absolute inset-0 bg-white/40"></div>
+
+      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 min-h-screen">
         {/* Logo */}
         <h1
           onClick={handleLogoClick}
@@ -45,13 +55,6 @@ export default function Landing() {
         <p className="text-lg text-gray-700 mb-10">
           Nikmati setiap tegukan dengan suasana yang hangat ☕
         </p>
-
-        {/* Hero Illustration */}
-        <img
-          src="/coffee-cup.png"
-          alt="Coffee Cup"
-          className="w-52 mb-8 drop-shadow-lg"
-        />
 
         {/* Button User */}
         <button
