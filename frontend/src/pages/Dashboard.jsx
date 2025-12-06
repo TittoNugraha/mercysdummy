@@ -20,6 +20,8 @@ const Dashboard = () => {
 
   const [recentOrders, setRecentOrders] = useState([]);
 
+  const admin = JSON.parse(localStorage.getItem("admin"));
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -79,7 +81,9 @@ const Dashboard = () => {
       <div className="flex-1 ml-60">
         <HeaderAdmin />
         <div className="p-8 min-h-screen bg-[#fdfaf6]">
-          <h1 className="text-2xl font-bold text-[#5c3d2e] mb-6">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-[#5c3d2e] mb-6">
+            Welcome, {admin?.name || "Admin"}
+          </h1>
 
           {/* Statistik Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
