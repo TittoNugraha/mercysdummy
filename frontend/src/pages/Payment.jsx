@@ -1,21 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { createOrder } from "../services/orderService";
 import qris from "../assets/images/qris2.png";
 
 export default function Payment() {
   const { state } = useLocation();
   const navigate = useNavigate();
+
   const [proof, setProof] = useState(null);
   const [orderId, setOrderId] = useState("");
   const [showConfirmBack, setShowConfirmBack] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(savedCart);
-  }, []);
 
   useEffect(() => {
     const randomId = Math.floor(100000 + Math.random() * 900000);
@@ -57,35 +51,24 @@ export default function Payment() {
     setShowConfirmBack(false);
   };
 
-  const handleConfirm = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("orderId", orderId);
-      formData.append("tableNumber", tableNumber);
-      formData.append("totalPrice", totalPrice);
-      formData.append("status", "pending");
-      formData.append("payment_proof", proof);
+  // === DUMMY CONFIRM METHOD (TANPA BACKEND) ===
+  const handleConfirm = () => {
+    const orderData = {
+      orderId,
+      tableNumber,
+      selectedItems,
+      totalPrice,
+      status: "pending",
+      proofName: proof?.name || "",
+    };
 
-      formData.append("items", JSON.stringify(selectedItems));
+    // Simpan dummy ke localStorage
+    localStorage.setItem("dummy_order", JSON.stringify(orderData));
 
-      const res = await fetch("http://localhost:5000/api/orders", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        navigate("/payment-success", {
-          state: { orderId, selectedItems, totalPrice },
-        });
-      } else {
-        console.error("Gagal confirm order:", data.error);
-        alert("Gagal simpan order: " + data.error);
-      }
-    } catch (err) {
-      console.error("Error confirm order:", err);
-    }
+    // Redirect ke success page
+    navigate("/payment-success", {
+      state: { orderId, selectedItems, totalPrice },
+    });
   };
 
   return (
@@ -169,11 +152,11 @@ export default function Payment() {
           </p>
           <input
             type="file"
-            name="payment_Proof"
             accept="image/*"
             onChange={handleProofUpload}
             className="block w-full border border-gray-300 rounded p-2"
           />
+
           {proof && (
             <div className="mt-3">
               <p className="text-sm text-gray-500">Preview:</p>

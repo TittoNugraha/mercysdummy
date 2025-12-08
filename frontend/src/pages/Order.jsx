@@ -1,12 +1,83 @@
+// src/pages/Home.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
 import MenuSection from "../components/MenuSection";
 import Footer from "../components/Footer";
-import { getMenus } from "../services/menuService";
 
-export default function Home() {
+// ========== DUMMY DATA ==========
+const dummyMenus = [
+  {
+    id: 1,
+    name: "Caramel Macchiato",
+    price: 28000,
+    available: true,
+    category: "signature",
+    photo: "/img/caramel.jpg",
+  },
+  {
+    id: 2,
+    name: "Hazelnut Latte",
+    price: 30000,
+    available: true,
+    category: "signature",
+    photo: "/img/hazelnut.jpg",
+  },
+
+  {
+    id: 3,
+    name: "Americano",
+    price: 20000,
+    available: true,
+    category: "coffee",
+    photo: "/img/americano.jpg",
+  },
+  {
+    id: 4,
+    name: "Cappuccino",
+    price: 25000,
+    available: false,
+    category: "coffee",
+    photo: "/img/cappuccino.jpg",
+  },
+
+  {
+    id: 5,
+    name: "Matcha Latte",
+    price: 26000,
+    available: true,
+    category: "non-coffee",
+    photo: "/img/matcha.jpg",
+  },
+  {
+    id: 6,
+    name: "Chocolate",
+    price: 24000,
+    available: true,
+    category: "non-coffee",
+    photo: "/img/choco.jpg",
+  },
+
+  {
+    id: 7,
+    name: "French Fries",
+    price: 18000,
+    available: true,
+    category: "food",
+    photo: "/img/fries.jpg",
+  },
+  {
+    id: 8,
+    name: "Chicken Pop",
+    price: 20000,
+    available: false,
+    category: "food",
+    photo: "/img/chickenpop.jpg",
+  },
+];
+
+export default function Order() {
   const navigate = useNavigate();
   const [tableNumber, setTableNumber] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
@@ -14,20 +85,13 @@ export default function Home() {
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const data = await getMenus();
-        setMenus(data);
-      } catch (err) {
-        console.error("Gagal ambil menu:", err);
-      }
-    };
-    fetchMenus();
+    setMenus(dummyMenus);
   }, []);
 
   const handleAddItem = (item) => {
-    const existing = selectedItems.find((i) => i.id === item.id);
-    if (existing) {
+    const exists = selectedItems.find((i) => i.id === item.id);
+
+    if (exists) {
       setSelectedItems((prev) =>
         prev.map((i) =>
           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
@@ -38,17 +102,15 @@ export default function Home() {
     }
   };
 
-  const handleRemoveItem = (itemId) => {
-    const existing = selectedItems.find((i) => i.id === itemId);
-    if (!existing) return;
+  const handleRemoveItem = (id) => {
+    const exists = selectedItems.find((i) => i.id === id);
+    if (!exists) return;
 
-    if (existing.quantity === 1) {
-      setSelectedItems((prev) => prev.filter((i) => i.id !== itemId));
+    if (exists.quantity === 1) {
+      setSelectedItems((prev) => prev.filter((i) => i.id !== id));
     } else {
       setSelectedItems((prev) =>
-        prev.map((i) =>
-          i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i
-        )
+        prev.map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i))
       );
     }
   };
@@ -57,6 +119,7 @@ export default function Home() {
     const item = selectedItems.find((i) => i.id === id);
     return item ? item.quantity : 0;
   };
+
   const totalItems = selectedItems.reduce(
     (acc, item) => acc + item.quantity,
     0
@@ -81,20 +144,16 @@ export default function Home() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
       className="pt-20 pb-24 px-4 bg-cream min-h-screen"
     >
       <Header tableNumber={tableNumber} setTableNumber={setTableNumber} />
 
-      {/* Tab Pilihan */}
+      {/* TABS */}
       <div className="flex justify-center gap-4 mb-6 fixed top-20 left-1/2 transform -translate-x-1/2 z-40">
         <button
           onClick={() => setActiveTab("minuman")}
-          className={`px-4 py-2 rounded-full font-medium shadow-lg transition ${
-            activeTab === "minuman"
-              ? "bg-[#a47148] text-white"
-              : "bg-[#f0e5d8] text-brown"
+          className={`px-4 py-2 rounded-full font-medium shadow-lg ${
+            activeTab === "minuman" ? "bg-[#a47148] text-white" : "bg-[#f0e5d8]"
           }`}
         >
           Minuman
@@ -102,19 +161,17 @@ export default function Home() {
 
         <button
           onClick={() => setActiveTab("makanan")}
-          className={`px-4 py-2 rounded-full font-medium shadow-lg transition ${
-            activeTab === "makanan"
-              ? "bg-[#a47148] text-white"
-              : "bg-[#f0e5d8] text-brown"
+          className={`px-4 py-2 rounded-full font-medium shadow-lg ${
+            activeTab === "makanan" ? "bg-[#a47148] text-white" : "bg-[#f0e5d8]"
           }`}
         >
           Makanan
         </button>
       </div>
 
-      {/* Section Menu */}
+      {/* MENU LIST */}
       {activeTab === "minuman" && (
-        <div className="space-y-8">
+        <>
           <MenuSection
             title="Signature Drink"
             items={menus.filter((m) => m.category === "signature")}
@@ -122,6 +179,7 @@ export default function Home() {
             onRemove={handleRemoveItem}
             getQty={getQty}
           />
+
           <MenuSection
             title="Coffee"
             items={menus.filter((m) => m.category === "coffee")}
@@ -129,6 +187,7 @@ export default function Home() {
             onRemove={handleRemoveItem}
             getQty={getQty}
           />
+
           <MenuSection
             title="Non Coffee"
             items={menus.filter((m) => m.category === "non-coffee")}
@@ -136,7 +195,7 @@ export default function Home() {
             onRemove={handleRemoveItem}
             getQty={getQty}
           />
-        </div>
+        </>
       )}
 
       {activeTab === "makanan" && (
@@ -149,7 +208,6 @@ export default function Home() {
         />
       )}
 
-      {/* Footer Checkout */}
       <Footer
         total={totalPrice}
         count={totalItems}

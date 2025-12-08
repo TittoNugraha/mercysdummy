@@ -1,3 +1,4 @@
+// src/components/Footer.jsx
 export default function Footer({ total, count, disabled, onProceed }) {
   if (count === 0) return null;
 
@@ -9,6 +10,7 @@ export default function Footer({ total, count, disabled, onProceed }) {
         </p>
         <p className="text-sm text-[#6b4c32]">{count} item</p>
       </div>
+
       <button
         disabled={disabled}
         onClick={onProceed}
