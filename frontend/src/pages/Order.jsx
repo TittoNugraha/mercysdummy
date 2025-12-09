@@ -39,16 +39,16 @@ const dummyMenus = [
     price: 25000,
     available: false,
     category: "coffee",
-    photo: "/img/cappuccino.jpg",
+    photo: "/img/cappucino.jpg",
   },
 
   {
     id: 5,
-    name: "Matcha Latte",
-    price: 26000,
+    name: "Lychee Tea",
+    price: 18000,
     available: true,
     category: "non-coffee",
-    photo: "/img/matcha.jpg",
+    photo: "/img/lychee tea.jpg",
   },
   {
     id: 6,
@@ -56,7 +56,7 @@ const dummyMenus = [
     price: 24000,
     available: true,
     category: "non-coffee",
-    photo: "/img/choco.jpg",
+    photo: "/img/chocolate.jpg",
   },
 
   {
@@ -69,11 +69,11 @@ const dummyMenus = [
   },
   {
     id: 8,
-    name: "Chicken Pop",
-    price: 20000,
+    name: "Sausage",
+    price: 15000,
     available: false,
     category: "food",
-    photo: "/img/chickenpop.jpg",
+    photo: "/img/sausage.jpg",
   },
 ];
 
